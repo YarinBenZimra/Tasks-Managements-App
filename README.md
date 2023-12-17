@@ -27,9 +27,8 @@ This Node.js application allows users to manage tasks with various functionaliti
 #### 1. Clone the repository
 
    ```bash 
-   git clone httpsgithub.comYarinBenZimraTasks-Managements-App.git
+   git clone https://github.com/YarinBenZimra/Tasks-Managements-App.git
 ```
-
    
 #### 2. Navigate to the project directory
 
