@@ -9,7 +9,7 @@ const {
   updateTaskPriorityInfoLogger, updateTaskPriorityDebugLogger,
   deleteTaskInfoLogger, deleteTaskDebugLogger, 
   errorLogger, setLoggerLevel} = require('./loggers'); 
-const {saveToFile, loadFromFile} = require('./DatsStorage');
+const {saveToFile, loadFromFile} = require('./DataStorage');
 
 const app = express();
 const PORT = 3000
@@ -42,7 +42,9 @@ app.post('/task/create', (req, res) => {
     });
   }
   
-  if (deadline <= Date.now()) {
+  timeInMilliseconds = Date.parse(deadline);
+ 
+  if (timeInMilliseconds <= Date.now()) {
     const errorMessage= "Can't create new task that it's deadline is over";
     errorLogger(errorMessage);
     return res.status(409).json({
@@ -121,7 +123,7 @@ app.get('/task/data', (req, res) => {
   const filteredTasks = priority === 'ALL' ? tasks : tasks.filter(task => task.priority === priority);
 
   if (sortBy === 'DEADLINE') {
-    filteredTasks.sort((taskA, taskB) => taskA.deadline - taskB.deadline);
+    filteredTasks.sort((taskA, taskB) => Date.parse(taskA.deadline) - Date.parse(taskB.deadline));
   } else if (sortBy === 'TITLE') {
     filteredTasks.sort((taskA, taskB) => taskA.title.localeCompare(taskB.title));
   } else if (sortBy) {
@@ -136,9 +138,15 @@ app.get('/task/data', (req, res) => {
   app.put('/task/priority', (req, res) => {
     const id = parseInt(req.query.id);
     const newPriority = req.query.priority;
-    
-    updateTaskPriorityInfoLogger(id, newPriority);
 
+    if (isNaN(id) ||!(Number.isInteger(id)) || id<0)
+    {
+      const errorMessage= `Invalid id, please enter positive integer.`;
+      errorLogger(errorMessage);
+      return res.status(404).json({
+        errorMessage: errorMessage
+      });
+    }
     const taskToUpdate = tasks.find(task => task.id === id);
     if (!taskToUpdate) {
       const errorMessage= `Task with Id ${id} not found.`;
@@ -155,7 +163,9 @@ app.get('/task/data', (req, res) => {
         errorMessage: errorMessage
       });
     }
-  
+    
+    updateTaskPriorityInfoLogger(id, newPriority);
+    
     const oldPriority = taskToUpdate.priority;
     taskToUpdate.priority = newPriority;
     res.status(200).json({
@@ -184,6 +194,16 @@ app.get('/task/data', (req, res) => {
   app.delete('/task', (req, res) => {    
     const id = parseInt(req.query.id);
     const previousSize = tasks.length;
+    
+    if (isNaN(id) ||!(Number.isInteger(id)) || id<0)
+    {
+      const errorMessage= `Invalid id, please enter positive integer.`;
+      errorLogger(errorMessage);
+      return res.status(404).json({
+        errorMessage: errorMessage
+      });
+    }
+    
     tasks = tasks.filter(task => task.id !== id);
     if (previousSize === tasks.length) {
       const errorMessage= `Task with Id ${id} not found.`;

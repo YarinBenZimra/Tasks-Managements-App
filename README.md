@@ -88,7 +88,7 @@ Content-Type applicationjson
 {
 "title": "New Task",
 "description": "Task description",
-"deadline": "2002838506993",
+"deadline": "2023-12-30 16:21",
 "priority": "HIGH"
 }
 ```
@@ -126,14 +126,14 @@ Response:
     "id": 4,
     "title": "Medium Priority Task",
     "description": "Description of medium priority task",
-    "deadline": "2023-12-15",
+    "deadline": "2023-11-24 16:21",
     "priority": "MEDIUM"
   },
   {
     "id": 6,
     "title": "Another Medium Priority Task",
     "description": "Another description",
-    "deadline": "2023-12-20",
+    "deadline": "2023-10-12 18:30",
     "priority": "MEDIUM"
   },
   // ... (other tasks)
@@ -177,14 +177,14 @@ Response:
     "id": 2,
     "title": "Important Task",
     "description": "This task is labeled as important",
-    "deadline": "2023-12-10",
+    "deadline": "2023-12-30 16:21",
     "priority": "HIGH"
   },
   {
     "id": 7,
     "title": "Another Important Task",
     "description": "Another important task",
-    "deadline": "2023-12-18",
+    "deadline": "2023-12-30 17:21",
     "priority": "MEDIUM"
   }
 ]
